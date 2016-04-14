@@ -5,6 +5,7 @@ import com.google.common.collect.*;
 import java.io.*;
 import java.net.*;
 import javax.json.*;
+import static org.junit.matchers.JUnitMatchers.*;
 
 /*
  * SpotifyChartsTest
@@ -44,8 +45,14 @@ public class SpotifyChartsTest {
         assertEquals("getName returns track name", "Panda", charts.getName(firstSong));
         assertEquals("getName returns track name", "Work", charts.getName(secondSong));
     }
-    @Test public void testGetTopTwo() {
-        String tracks = "1. Panda 2. Work";
-        assertEquals("getTopTwo returns string of first two songs", tracks, charts.getTopTwo());
+    @Test public void testGetTopNames() {
+        assertEquals("getTopNames returns list of size passed", 1, charts.getTopNames(1).size());
+        List<String> three = charts.getTopNames(3);
+        assertEquals("getTopNames returns list of size passed", 3, three.size());
+        assertEquals("getTopNames returns Panda in 1st position", "Panda", three.get(0));
+        assertEquals("getTopNames returns Work in 2st position", "Work", three.get(1));
+        assertEquals("getTopNames returns Work from Home in 3rd position", "Work from Home", three.get(2));
+        int largeSize = charts.getTopNames(100000).size();
+        assertTrue("getTopNames doesn't break when passed very large number", 20 < largeSize);
     }
 }

@@ -22,7 +22,7 @@ public class SpotifyCharts {
 
     public static void main (String... args) {
         SpotifyCharts charts = new SpotifyCharts("US", 1);
-        System.out.println(charts.getTopTwo());
+        System.out.println(charts.getTopNames(3));
     }
 
     private String country;
@@ -79,11 +79,15 @@ public class SpotifyCharts {
         return song.getJsonObject("track").getString("name");
     }
 
-    public String getTopTwo() {
+    public List<String> getTopNames(int n) {
         JsonArray songs = getSongs();
-        String songOne = getName(songs.getJsonObject(0));
-        String soneTwo = getName(songs.getJsonObject(1));
-        return "1. " + songOne + " 2. " + soneTwo;
+        int counter = n > songs.size() ? songs.size() : n;
+        List<String> names = new ArrayList<>();
+        for (int i = 0; i < counter; i++) {
+            String name = getName(songs.getJsonObject(i));
+            names.add(name);
+        }
+        return names;
     }
 }
 
