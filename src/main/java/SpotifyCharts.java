@@ -81,9 +81,9 @@ public class SpotifyCharts {
 
     public List<String> getTopNames(int n) {
         JsonArray songs = getSongs();
-        int counter = n > songs.size() ? songs.size() : n;
+        n = Math.min(n, songs.size());
         List<String> names = new ArrayList<>();
-        for (int i = 0; i < counter; i++) {
+        for (int i = 0; i < n; i++) {
             String name = getName(songs.getJsonObject(i));
             names.add(name);
         }
