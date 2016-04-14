@@ -20,6 +20,11 @@ public class SpotifyCharts {
         "date", "latest"
     );
 
+    public static void main (String... args) {
+        SpotifyCharts charts = new SpotifyCharts("US", 1);
+        System.out.println(charts.getTopTwo());
+    }
+
     private String country;
     private int rank;
 
@@ -44,15 +49,16 @@ public class SpotifyCharts {
     }
 
     public String getStringUrl() {
-        String params = getParams();
-        System.out.println(url + "?" + params);
-        return url + "?" + params;
+        return url + "?" + getParams();
     }
 
     public URL getUrl() {
         String sUrl = getStringUrl();
-        System.out.println(sUrl);
-        return new URL(getStringUrl());
+        try {
+            return new URL(getStringUrl());
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public JsonArray getSongs() {
@@ -63,12 +69,14 @@ public class SpotifyCharts {
             JsonObject data = reader.readObject();
             JsonObject entries = data.getJsonObject("entries");
             songs = entries.getJsonArray("items");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         return songs;
     }
 
-    public String getName(song) {
-        return song.get("track").get("name");
+    public String getName(JsonObject song) {
+        return song.getJsonObject("track").getString("name");
     }
 
     public String getTopTwo() {
